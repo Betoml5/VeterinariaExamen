@@ -1,0 +1,72 @@
+﻿<Window x:Class="VeterinariaExamen.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:m="clr-namespace:VeterinariaExamen.Models"
+        xmlns:local="clr-namespace:VeterinariaExamen.Views" xmlns:viewmodels="clr-namespace:VeterinariaExamen.ViewModels"
+        mc:Ignorable="d"
+        Title="Veterinaria"  
+        WindowState="Maximized"
+        Background="#FFF0AA" Width="600" Height="500" MinWidth="600" MinHeight="500">
+    
+    <Window.DataContext>
+        <viewmodels:MascotasViewModel x:Name="mascotasViewModel"></viewmodels:MascotasViewModel>
+    </Window.DataContext>
+    <Window.Resources>
+        <local:MascotaTemplate x:Key="mascotaTemplate" ></local:MascotaTemplate>
+
+        <DataTemplate DataType="{x:Type m:Mascota}">
+            <Border  HorizontalAlignment="Stretch" BorderBrush="LightGray" BorderThickness="1" Background="White" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontWeight="Bold" FontSize="15" Text="{Binding Nombre}"></TextBlock>
+                    <TextBlock Foreground="Gray"  FontSize="12" Grid.Row="1"><TextBlock Text="{Binding Tipo}"></TextBlock>, <TextBlock Text="{Binding Años}"></TextBlock> años. Nombre del propietario: <TextBlock Text="{Binding NombrePropietario}"></TextBlock></TextBlock>
+                    <Button Command="{Binding EliminarCommand, Source={x:Reference mascotasViewModel}}" Cursor="Hand" Background="Transparent" BorderThickness="0" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Image Source="../Assets/delete.png" Height="40"></Image>
+                    </Button>
+                   
+                </Grid>
+            </Border>
+            
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height=".1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0">
+            <Image Width="80" Margin="10" Source="../assets/logo.png"></Image>
+            <TextBlock  FontWeight="Bold" Foreground="Purple" FontSize="30" VerticalAlignment="Center" TextWrapping="Wrap">  de pacientes de la veterinaria</TextBlock>
+        </DockPanel>
+
+        <ListBox SelectedItem="{Binding Mascota}" ItemsSource="{Binding Lista}" Background="Transparent" Height="auto" HorizontalContentAlignment="Stretch" Grid.Row="1" BorderThickness="0">
+        </ListBox>
+        <Button Command="{Binding AgregarCommand}" Cursor="Hand" Background="Transparent" BorderThickness="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+            <Image Source="../Assets/plus.png" Height="60"></Image>
+        </Button>
+        <ContentControl Grid.Row="0" Grid.RowSpan="2" Margin="-10">
+            <ContentControl.Resources>
+                <local:AgregarPacienteView x:Key="agregaPaciente"></local:AgregarPacienteView>
+            </ContentControl.Resources>
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Vista}" Value="Agregar">
+                            <Setter Property="Content" Value="{StaticResource agregaPaciente}"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,5">
+            <TextBlock FontWeight="SemiBold">Jesus Alberto Martinez Luna-</TextBlock>
+            <TextBlock FontWeight="SemiBold">221GC057</TextBlock>
+        </WrapPanel>
+    </Grid>
+</Window>
